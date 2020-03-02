@@ -1,8 +1,13 @@
-## Spwarn EKS in AWS with terraform
+## Spwan EKS in AWS with terraform
 
 based on https://learn.hashicorp.com/terraform/aws/eks-intro
 
-## Run
+### Prerequisite
+
+- Terraform >= v0.12
+- Ansible >= 2.6
+
+### Run
 
 ```
 cd devops/terraform
