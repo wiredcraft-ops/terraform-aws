@@ -12,7 +12,7 @@ locals {
   demo-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.demo.endpoint}' --b64-cluster-ca '${aws_eks_cluster. demo.certificate_authority[0].data}' '${var.cluster-name}'
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.demo.endpoint}' --b64-cluster-ca '${aws_eks_cluster.demo.certificate_authority[0].data}' '${var.cluster-name}'
 USERDATA
 
 }
@@ -23,8 +23,8 @@ resource "aws_launch_configuration" "demo" {
   image_id                    = data.aws_ami.eks-worker.id
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks-demo"
-  security_groups  = [aws_security_group.demo-node.id]
-  user_data_base64 = base64encode(local.demo-node-userdata)
+  security_groups             = [aws_security_group.demo-node.id]
+  user_data_base64            = base64encode(local.demo-node-userdata)
 
   lifecycle {
     create_before_destroy = true
@@ -37,7 +37,10 @@ resource "aws_autoscaling_group" "demo" {
   max_size             = 2
   min_size             = 1
   name                 = "terraform-eks-demo"
-  vpc_zone_identifier = [aws_subnet.demo.*.id]
+  # FIXME
+  # vpc_zone_identifier = [aws_subnet.demo.*.id]
+  vpc_zone_identifier = [aws_subnet.demo[0].id, aws_subnet.demo[1].id]
+
 
   tag {
     key                 = "Name"

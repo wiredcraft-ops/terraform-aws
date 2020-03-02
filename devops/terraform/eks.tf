@@ -1,10 +1,12 @@
 resource "aws_eks_cluster" "demo" {
-  name            = var.cluster-name
-  role_arn        = aws_iam_role.demo-node.arn
+  name     = var.cluster-name
+  role_arn = aws_iam_role.demo-node.arn
 
   vpc_config {
     security_group_ids = [aws_security_group.demo-cluster.id]
-    subnet_ids         = [aws_subnet.demo.*.id]
+    # FIXME
+    # subnet_ids         = aws_subnet.demo.*.id
+    subnet_ids = [aws_subnet.demo[0].id, aws_subnet.demo[1].id]
   }
 
   depends_on = [
