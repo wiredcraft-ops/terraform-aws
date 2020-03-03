@@ -1,3 +1,7 @@
+terraform {
+  required_version = "~> 0.12"
+}
+
 provider "aws" {
   version = "~> 2.0"
   region  = var.region
@@ -8,5 +12,5 @@ provider "aws" {
 
 # save secrets in ansible-vault file
 data "external" "vault" {
-  program = ["ansible-vault", "view", "--vault-password-file=../../.vault_password", "./vault.json"]
+  program = ["ansible-vault", "view", "--vault-password-file=../../.vault_password", "../vault.json"]
 }
