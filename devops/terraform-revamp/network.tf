@@ -5,11 +5,15 @@ resource "aws_vpc" "demo" {
 }
 
 resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.demo
+  vpc_id     = aws_vpc.demo.id
   cidr_block = var.public-subnet-cidr
 }
 
 resource "aws_subnet" "private" {
-  vpc_id     = aws_vpc.demo
+  vpc_id     = aws_vpc.demo.id
   cidr_block = var.private-subnet-cidr
+}
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.demo.id
 }

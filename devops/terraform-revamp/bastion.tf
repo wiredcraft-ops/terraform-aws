@@ -1,6 +1,6 @@
 resource "aws_instance" "bastion" {
   ami           = data.aws_ami.bastion.id
-  instance_type = "t2.small"
+  instance_type = "c5.large" # TODO: fetch from data
 
   key_name = aws_key_pair.qingfeng.key_name
 

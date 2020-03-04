@@ -1,11 +1,12 @@
 data "aws_ami" "bastion" {
   most_recent = true
-  owners      = ["679593333241"] # centos.org
+
+  owners = ["679593333241"] # aws-marketplace
 
   filter {
-    name = "name"
-    value = [
-      "CentOS Linux 7 x86_64 HVM EBS*"
+    name = "product-code"
+    values = [
+      "aw0evgkw8e5c1q413zgy5pjce" # need to subscribe first: https://aws.amazon.com/marketplace/pp?sku=aw0evgkw8e5c1q413zgy5pjce
     ]
   }
 }
