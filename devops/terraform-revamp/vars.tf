@@ -18,3 +18,8 @@ variable "wcl-ips" {
   type    = list(string)
   default = ["222.66.90.82/32", "103.220.77.16/32"]
 }
+
+# eks
+variable "eks-name" {
+  default = "tf-demo-eks"
+}

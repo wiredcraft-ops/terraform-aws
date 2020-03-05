@@ -12,6 +12,10 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.demo.id
   cidr_block = var.private-subnet-cidr
+
+  tags = {
+    "kubernetes.io/cluster/${var.eks-name}" = "shared"
+  }
 }
 
 resource "aws_internet_gateway" "igw" { # vs egress only internet gateway

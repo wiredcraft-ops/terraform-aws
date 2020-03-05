@@ -10,7 +10,7 @@ based on https://learn.hashicorp.com/terraform/aws/eks-intro
 ### Run
 
 ```
-cd devops/terraform
+cd devops/terraform-revamp
 
 terraform init
 
@@ -21,16 +21,17 @@ terraform apply
 ```
 
 ### Connecting to k8s
+
 ```
-export KUBECONFIG=~/.kube/wcl.aws.config
 export AWS_ACCESS_KEY_ID=xxx
 export AWS_SECRET_ACCESS_KEY=xxx
 
 terraform output kubeconfig > ~/.kube/wcl.aws.config
+export KUBECONFIG=~/.kube/wcl.aws.config
 
-terraform output config_map_aws_auth > ../k8s/config_map_aws_auth.yml
+# terraform output config-map-aws-auth > ../k8s/config-map-aws-auth.yml
 
-kubectl apply -f ../k8s/config_map_aws_auth.yml
+# kubectl apply -f ../k8s/config-map-aws-auth.yml
 
 watch "kubectl get nodes"
 ```
