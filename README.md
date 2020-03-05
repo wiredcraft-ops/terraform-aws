@@ -29,9 +29,5 @@ export AWS_SECRET_ACCESS_KEY=xxx
 terraform output kubeconfig > ~/.kube/wcl.aws.config
 export KUBECONFIG=~/.kube/wcl.aws.config
 
-# terraform output config-map-aws-auth > ../k8s/config-map-aws-auth.yml
-
-# kubectl apply -f ../k8s/config-map-aws-auth.yml
-
 watch "kubectl get nodes"
 ```
