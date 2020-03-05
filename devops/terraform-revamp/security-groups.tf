@@ -7,6 +7,15 @@ resource "aws_security_group_rule" "allow-ssh" {
   cidr_blocks       = var.wcl-ips
   security_group_id = aws_vpc.demo.default_security_group_id
 }
+# allow traffic across VPC
+resource "aws_security_group_rule" "allow-from-eks-worker" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = [var.vpc-cidr]
+  security_group_id = aws_vpc.demo.default_security_group_id
+}
 
 # eks
 resource "aws_security_group" "demo-eks" {
