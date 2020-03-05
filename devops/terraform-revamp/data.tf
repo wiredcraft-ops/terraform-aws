@@ -1,4 +1,4 @@
-data "aws_ami" "bastion" {
+data "aws_ami" "centos" {
   most_recent = true
 
   owners = ["679593333241"] # aws-marketplace
