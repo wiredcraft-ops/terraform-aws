@@ -18,9 +18,35 @@ resource "aws_internet_gateway" "igw" { # vs egress only internet gateway
   vpc_id = aws_vpc.demo.id
 }
 
-# update route table
-resource "aws_route" "internet" {
+# add route for main route table(internet access for public subnet)
+resource "aws_route" "main" {
   route_table_id         = aws_vpc.demo.main_route_table_id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw.id
+}
+
+resource "aws_eip" "ngw" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.ngw.id
+  subnet_id     = aws_subnet.public.id
+
+  depends_on = [aws_internet_gateway.igw]
+}
+
+# add route for custom route table(internet access for private subnet)
+resource "aws_route_table" "custom" {
+  vpc_id = aws_vpc.demo.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.ngw.id
+  }
+}
+
+resource "aws_route_table_association" "custom" {
+  subnet_id      = aws_subnet.private.id
+  route_table_id = aws_route_table.custom.id
 }
