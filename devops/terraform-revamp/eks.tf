@@ -30,4 +30,10 @@ resource "aws_eks_node_group" "demo" {
     aws_iam_role_policy_attachment.demo-eks-node-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.demo-eks-node-AmazonEC2ContainerRegistryReadOnly,
   ]
+
+  remote_access {
+    ec2_ssh_key = aws_key_pair.qingfeng.key_name
+    # allow ssh from servers inside VPC
+    source_security_group_ids = [aws_vpc.demo.default_security_group_id]
+  }
 }
