@@ -1,4 +1,3 @@
-# TODO: NAT gateway
 resource "aws_instance" "database" {
   ami = data.aws_ami.centos.id
 
