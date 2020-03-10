@@ -27,6 +27,10 @@ resource "aws_iam_role_policy_attachment" "demo-eks-AmazonEKSServicePolicy" {
   role       = aws_iam_role.demo-eks.name
 }
 
+# resource "aws_iam_service_linked_role" "elasticloadbalancing" {
+#   aws_service_name = "elasticloadbalancing.amazonaws.com"
+# }
+
 # eks node group
 resource "aws_iam_role" "demo-eks-node" {
   name = "${var.eks-name}-node"
