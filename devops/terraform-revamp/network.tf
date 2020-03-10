@@ -7,6 +7,10 @@ resource "aws_vpc" "demo" {
 resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.demo.id
   cidr_block = var.public-subnet-cidr
+
+  tags = {
+    "kubernetes.io/role/elb" = 1
+  }
 }
 
 resource "aws_subnet" "private" {
