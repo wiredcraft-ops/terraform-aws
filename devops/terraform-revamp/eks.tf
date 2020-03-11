@@ -1,6 +1,6 @@
 resource "aws_eks_cluster" "demo" {
   name     = var.eks-name
-  role_arn = aws_iam_role.demo-eks.arn
+  role_arn = aws_iam_role.eks.arn
 
   vpc_config {
     endpoint_private_access = true
@@ -10,8 +10,8 @@ resource "aws_eks_cluster" "demo" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.demo-eks-AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.demo-eks-AmazonEKSServicePolicy,
+    aws_iam_role_policy_attachment.eks-AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.eks-AmazonEKSServicePolicy,
   ]
 }
 
