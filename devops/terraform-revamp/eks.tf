@@ -56,7 +56,7 @@ resource "aws_launch_configuration" "demo" {
 
   key_name = aws_key_pair.qingfeng.key_name
 
-  security_groups = [aws_security_group.demo-eks.id]
+  security_groups = [aws_security_group.demo-eks.id, aws_security_group.eks-node.id]
 
   user_data_base64 = base64encode(local.eks-node-userdata)
 
@@ -73,6 +73,8 @@ resource "aws_autoscaling_group" "demo" {
   max_size            = 5
   min_size            = 1
   vpc_zone_identifier = [aws_subnet.private-1.id, aws_subnet.private-2.id, aws_subnet.private-3.id]
+
+  target_group_arns = [aws_lb_target_group.demo.arn]
 
   tag {
     key                 = "Name"

@@ -7,6 +7,26 @@ resource "aws_security_group_rule" "allow-ssh" {
   cidr_blocks       = var.bastion-whitelist
   security_group_id = aws_vpc.demo.default_security_group_id
 }
+
+resource "aws_security_group" "allow-http" {
+  name   = "allow-http"
+  vpc_id = aws_vpc.demo.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"] # allow connect to eks(control panel + worker)
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 # allow traffic across VPC
 resource "aws_security_group_rule" "allow-from-eks-worker" {
   type              = "ingress"

@@ -13,3 +13,7 @@ output "kubeconfig" {
 output "config-map-aws-auth" {
   value = local.config_map_aws_auth
 }
+
+output "lb-dns-name" {
+  value = aws_lb.demo.dns_name
+}
