@@ -11,7 +11,7 @@ variable "vpc-cidr" {
 }
 
 variable "public-subnet-1-cidr" {
-  default = "172.16.1.0/20"
+  default = "172.16.0.0/20"
 }
 
 variable "public-subnet-2-cidr" {

@@ -10,8 +10,8 @@ resource "aws_instance" "bastion" {
     volume_type = "gp2"
     volume_size = 20
   }
-
-  associate_public_ip_address = false
+  # TODO: disable
+  associate_public_ip_address = true
 }
 
 resource "aws_eip" "bastion" {

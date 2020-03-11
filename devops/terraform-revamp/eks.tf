@@ -5,7 +5,7 @@ resource "aws_eks_cluster" "demo" {
   vpc_config {
     endpoint_private_access = true
     endpoint_public_access  = false
-    security_group_ids      = [aws_security_group.demo-eks.id]
+    security_group_ids      = [aws_security_group.demo-eks.id, aws_security_group.eks-node.id]
     subnet_ids              = [aws_subnet.public-1.id, aws_subnet.public-2.id, aws_subnet.public-3.id, aws_subnet.private-1.id, aws_subnet.private-2.id, aws_subnet.private-3.id]
   }
 
@@ -53,8 +53,12 @@ resource "aws_launch_configuration" "demo" {
   image_id             = data.aws_ami.eks-worker.id
   instance_type        = var.eks-worker-instance-type
   name_prefix          = "tf-"
-  security_groups      = [aws_security_group.demo-eks.id]
-  user_data_base64     = base64encode(local.eks-node-userdata)
+
+  key_name = aws_key_pair.qingfeng.key_name
+
+  security_groups = [aws_security_group.demo-eks.id]
+
+  user_data_base64 = base64encode(local.eks-node-userdata)
 
   lifecycle {
     create_before_destroy = true
