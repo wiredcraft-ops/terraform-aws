@@ -46,9 +46,19 @@ variable "az-3" {
   default = "usw2-az3"
 }
 
-variable "wcl-ips" {
+variable "bastion-whitelist" {
   type    = list(string)
   default = ["222.66.90.82/32", "103.220.77.16/32"]
+}
+
+# bastion
+variable "bastion-instance-type" {
+  default = "t3.micro"
+}
+
+# database
+variable "database-instance-type" {
+  default = "t3.micro"
 }
 
 # eks
@@ -57,5 +67,5 @@ variable "eks-name" {
 }
 
 variable "eks-worker-instance-type" {
-  default = "t3.medium"
+  default = "t3.small"
 }

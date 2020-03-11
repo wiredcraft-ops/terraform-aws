@@ -4,7 +4,7 @@ resource "aws_security_group_rule" "allow-ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = var.wcl-ips
+  cidr_blocks       = var.bastion-whitelist
   security_group_id = aws_vpc.demo.default_security_group_id
 }
 # allow traffic across VPC

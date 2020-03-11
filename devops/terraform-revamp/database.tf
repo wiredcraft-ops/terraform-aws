@@ -1,7 +1,7 @@
 resource "aws_instance" "database" {
   ami = data.aws_ami.centos.id
 
-  instance_type = "c5.large" # TODO: fetch from data
+  instance_type = var.database-instance-type # TODO: fetch from data
 
   key_name = aws_key_pair.qingfeng.key_name
 
