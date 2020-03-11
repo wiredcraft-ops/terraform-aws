@@ -8,9 +8,10 @@ resource "aws_vpc" "demo" {
   }
 }
 
-resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.demo.id
-  cidr_block = var.public-subnet-cidr
+resource "aws_subnet" "public-1" {
+  vpc_id               = aws_vpc.demo.id
+  cidr_block           = var.public-subnet-1-cidr
+  availability_zone_id = var.az-1
 
   tags = {
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
@@ -18,9 +19,32 @@ resource "aws_subnet" "public" {
   }
 }
 
-resource "aws_subnet" "private" {
-  vpc_id     = aws_vpc.demo.id
-  cidr_block = var.private-subnet-cidr
+resource "aws_subnet" "public-2" {
+  vpc_id               = aws_vpc.demo.id
+  cidr_block           = var.public-subnet-2-cidr
+  availability_zone_id = var.az-2
+
+  tags = {
+    "kubernetes.io/cluster/${var.eks-name}" = "shared"
+    "kubernetes.io/role/elb"                = 1
+  }
+}
+
+resource "aws_subnet" "public-3" {
+  vpc_id               = aws_vpc.demo.id
+  cidr_block           = var.public-subnet-3-cidr
+  availability_zone_id = var.az-3
+
+  tags = {
+    "kubernetes.io/cluster/${var.eks-name}" = "shared"
+    "kubernetes.io/role/elb"                = 1
+  }
+}
+
+resource "aws_subnet" "private-1" {
+  vpc_id               = aws_vpc.demo.id
+  cidr_block           = var.private-subnet-1-cidr
+  availability_zone_id = var.az-1
 
   tags = {
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
@@ -28,7 +52,29 @@ resource "aws_subnet" "private" {
   }
 }
 
-resource "aws_internet_gateway" "igw" { # vs egress only internet gateway
+resource "aws_subnet" "private-2" {
+  vpc_id               = aws_vpc.demo.id
+  cidr_block           = var.private-subnet-2-cidr
+  availability_zone_id = var.az-2
+
+  tags = {
+    "kubernetes.io/cluster/${var.eks-name}" = "shared"
+    "kubernetes.io/role/internal-elb"       = 1
+  }
+}
+
+resource "aws_subnet" "private-3" {
+  vpc_id               = aws_vpc.demo.id
+  cidr_block           = var.private-subnet-3-cidr
+  availability_zone_id = var.az-3
+
+  tags = {
+    "kubernetes.io/cluster/${var.eks-name}" = "shared"
+    "kubernetes.io/role/internal-elb"       = 1
+  }
+}
+
+resource "aws_internet_gateway" "igw" { # VS egress only internet gateway
   vpc_id = aws_vpc.demo.id
 }
 
@@ -39,28 +85,75 @@ resource "aws_route" "main" {
   gateway_id             = aws_internet_gateway.igw.id
 }
 
-resource "aws_eip" "ngw" {
+resource "aws_eip" "ngw-1" {
   vpc = true
 }
 
-resource "aws_nat_gateway" "ngw" {
-  allocation_id = aws_eip.ngw.id
-  subnet_id     = aws_subnet.public.id
+resource "aws_nat_gateway" "ngw-1" {
+  allocation_id = aws_eip.ngw-1.id
+  subnet_id     = aws_subnet.public-1.id
 
   depends_on = [aws_internet_gateway.igw]
 }
 
-# add route for custom route table(internet access for private subnet)
-resource "aws_route_table" "custom" {
+resource "aws_eip" "ngw-2" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "ngw-2" {
+  allocation_id = aws_eip.ngw-2.id
+  subnet_id     = aws_subnet.public-2.id
+
+  depends_on = [aws_internet_gateway.igw]
+}
+
+resource "aws_eip" "ngw-3" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "ngw-3" {
+  allocation_id = aws_eip.ngw-3.id
+  subnet_id     = aws_subnet.public-3.id
+
+  depends_on = [aws_internet_gateway.igw]
+}
+
+# add route for custom route table(internet access for private subnets)
+resource "aws_route_table" "custom-1" {
   vpc_id = aws_vpc.demo.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.ngw.id
+    nat_gateway_id = aws_nat_gateway.ngw-1.id
   }
 }
+resource "aws_route_table_association" "custom-1" {
+  subnet_id      = aws_subnet.private-1.id
+  route_table_id = aws_route_table.custom-1.id
+}
 
-resource "aws_route_table_association" "custom" {
-  subnet_id      = aws_subnet.private.id
-  route_table_id = aws_route_table.custom.id
+resource "aws_route_table" "custom-2" {
+  vpc_id = aws_vpc.demo.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.ngw-2.id
+  }
+}
+resource "aws_route_table_association" "custom-2" {
+  subnet_id      = aws_subnet.private-2.id
+  route_table_id = aws_route_table.custom-2.id
+}
+
+resource "aws_route_table" "custom-3" {
+  vpc_id = aws_vpc.demo.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.ngw-3.id
+  }
+}
+resource "aws_route_table_association" "custom-3" {
+  subnet_id      = aws_subnet.private-3.id
+  route_table_id = aws_route_table.custom-3.id
 }
