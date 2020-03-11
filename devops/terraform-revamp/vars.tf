@@ -1,3 +1,7 @@
+variable "name" {
+  default = "tf-demo"
+}
+
 variable "region" {
   default = "us-west-2"
 }
@@ -50,4 +54,8 @@ variable "wcl-ips" {
 # eks
 variable "eks-name" {
   default = "tf-demo-eks"
+}
+
+variable "eks-worker-instance-type" {
+  default = "t3.medium"
 }

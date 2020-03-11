@@ -19,7 +19,7 @@ resource "aws_security_group_rule" "allow-from-eks-worker" {
 
 # eks
 resource "aws_security_group" "demo-eks" {
-  name        = "tf-demo-eks"
+  name        = var.eks-name
   description = "Cluster communication with worker nodes"
   vpc_id      = aws_vpc.demo.id
 
@@ -38,6 +38,7 @@ resource "aws_security_group" "demo-eks" {
   }
 
   tags = {
-    Name = "tf-demo-eks"
+    Name                                    = var.eks-name
+    "kubernetes.io/cluster/${var.eks-name}" = "owned"
   }
 }

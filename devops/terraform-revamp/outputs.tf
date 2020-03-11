@@ -1,5 +1,5 @@
-output "bastion-public-ip" {
-  value = aws_instance.bastion.public_ip
+output "bastion-eip" {
+  value = aws_eip.bastion.public_ip
 }
 
 output "database-private-ip" {

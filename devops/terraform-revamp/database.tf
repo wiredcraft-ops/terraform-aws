@@ -5,7 +5,7 @@ resource "aws_instance" "database" {
 
   key_name = aws_key_pair.qingfeng.key_name
 
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.private-1.id
 
   root_block_device {
     volume_type = "gp2"

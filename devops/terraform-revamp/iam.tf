@@ -1,6 +1,6 @@
 # eks
-resource "aws_iam_role" "demo-eks" {
-  name               = "tf-demo-eks"
+resource "aws_iam_role" "eks" {
+  name               = var.eks-name
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -17,14 +17,14 @@ resource "aws_iam_role" "demo-eks" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "demo-eks-AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "eks-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.demo-eks.name
+  role       = aws_iam_role.eks.name
 }
 
-resource "aws_iam_role_policy_attachment" "demo-eks-AmazonEKSServicePolicy" {
+resource "aws_iam_role_policy_attachment" "eks-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-  role       = aws_iam_role.demo-eks.name
+  role       = aws_iam_role.eks.name
 }
 
 # resource "aws_iam_service_linked_role" "elasticloadbalancing" {
@@ -32,7 +32,7 @@ resource "aws_iam_role_policy_attachment" "demo-eks-AmazonEKSServicePolicy" {
 # }
 
 # eks node group
-resource "aws_iam_role" "demo-eks-node" {
+resource "aws_iam_role" "eks-node" {
   name = "${var.eks-name}-node"
 
   assume_role_policy = <<POLICY
@@ -51,17 +51,22 @@ resource "aws_iam_role" "demo-eks-node" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "demo-eks-node-AmazonEKSWorkerNodePolicy" {
+resource "aws_iam_role_policy_attachment" "eks-node-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.demo-eks-node.name
+  role       = aws_iam_role.eks-node.name
 }
 
-resource "aws_iam_role_policy_attachment" "demo-eks-node-AmazonEKS_CNI_Policy" {
+resource "aws_iam_role_policy_attachment" "eks-node-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.demo-eks-node.name
+  role       = aws_iam_role.eks-node.name
 }
 
-resource "aws_iam_role_policy_attachment" "demo-eks-node-AmazonEC2ContainerRegistryReadOnly" {
+resource "aws_iam_role_policy_attachment" "eks-node-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.demo-eks-node.name
+  role       = aws_iam_role.eks-node.name
+}
+
+resource "aws_iam_instance_profile" "eks-node" {
+  name = "${var.eks-name}-eks-node-instance-profile"
+  role = aws_iam_role.eks-node.name
 }
