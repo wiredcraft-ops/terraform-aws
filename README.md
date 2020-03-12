@@ -1,5 +1,7 @@
 ## Spawn EKS in AWS with terraform
 
+![infra diagram](./docs/EKS.png)
+
 ### Prerequisite
 
 - Terraform >= v0.12
@@ -19,7 +21,15 @@ terraform apply
 
 ### Connecting to k8s
 
+> We are limiting k8s API endpoint for private access only
+
 ```
+# get EIP of bastion server
+terraform output bastion-eip
+
+# ssh in bastion
+ssh -A centos@BASTION_EIP
+
 # install kubectl: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
 curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl
 
@@ -39,3 +49,7 @@ kubectl apply -f ../k8s/config-map-aws-auth.yml
 
 kubectl get nodes
 ```
+
+### TODO
+
+- install metrics server - https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html
