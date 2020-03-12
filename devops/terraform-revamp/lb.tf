@@ -1,5 +1,5 @@
 #
-# Application Load Balancer
+# Load Balancer
 #
 resource "aws_lb" "demo" {
   name               = var.name
@@ -26,8 +26,3 @@ resource "aws_lb_target_group" "demo" {
   target_type = "instance"
   vpc_id      = aws_vpc.demo.id
 }
-
-# resource "aws_autoscaling_attachment" "demo" {
-#   autoscaling_group_name = aws_eks_node_group.demo.resources.name
-#   elb                    = aws_lb.demo.id
-# }

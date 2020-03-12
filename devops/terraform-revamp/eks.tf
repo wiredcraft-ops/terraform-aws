@@ -15,6 +15,10 @@ resource "aws_eks_cluster" "demo" {
   ]
 }
 
+#
+# EKS managed node group
+#
+
 # resource "aws_eks_node_group" "demo" {
 #   cluster_name    = aws_eks_cluster.demo.name
 #   node_group_name = "demo"
@@ -40,6 +44,10 @@ resource "aws_eks_cluster" "demo" {
 #   }
 # }
 
+#
+# Self created autoscaling group
+#
+
 locals {
   eks-node-userdata = <<USERDATA
 #!/bin/bash
@@ -49,10 +57,11 @@ USERDATA
 }
 
 resource "aws_launch_configuration" "demo" {
-  iam_instance_profile = aws_iam_instance_profile.eks-node.name
+  name_prefix = "tf-"
+
   image_id             = data.aws_ami.eks-worker.id
   instance_type        = var.eks-worker-instance-type
-  name_prefix          = "tf-"
+  iam_instance_profile = aws_iam_instance_profile.eks-node.name
 
   key_name = aws_key_pair.qingfeng.key_name
 
@@ -66,7 +75,8 @@ resource "aws_launch_configuration" "demo" {
 }
 
 resource "aws_autoscaling_group" "demo" {
-  name                 = var.eks-name
+  name_prefix = "tf-"
+
   launch_configuration = aws_launch_configuration.demo.id
 
   desired_capacity    = 3

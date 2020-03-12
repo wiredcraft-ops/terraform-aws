@@ -14,6 +14,7 @@ resource "aws_subnet" "public-1" {
   availability_zone_id = var.az-1
 
   tags = {
+    Name                                    = "public-1"
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
     "kubernetes.io/role/elb"                = 1
   }
@@ -25,6 +26,7 @@ resource "aws_subnet" "public-2" {
   availability_zone_id = var.az-2
 
   tags = {
+    Name                                    = "public-2"
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
     "kubernetes.io/role/elb"                = 1
   }
@@ -36,6 +38,7 @@ resource "aws_subnet" "public-3" {
   availability_zone_id = var.az-3
 
   tags = {
+    Name                                    = "public-3"
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
     "kubernetes.io/role/elb"                = 1
   }
@@ -47,6 +50,7 @@ resource "aws_subnet" "private-1" {
   availability_zone_id = var.az-1
 
   tags = {
+    Name                                    = "private-1"
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
     "kubernetes.io/role/internal-elb"       = 1
   }
@@ -58,6 +62,7 @@ resource "aws_subnet" "private-2" {
   availability_zone_id = var.az-2
 
   tags = {
+    Name                                    = "private-2"
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
     "kubernetes.io/role/internal-elb"       = 1
   }
@@ -69,6 +74,7 @@ resource "aws_subnet" "private-3" {
   availability_zone_id = var.az-3
 
   tags = {
+    Name                                    = "private-3"
     "kubernetes.io/cluster/${var.eks-name}" = "shared"
     "kubernetes.io/role/internal-elb"       = 1
   }
@@ -78,7 +84,7 @@ resource "aws_internet_gateway" "igw" { # VS egress only internet gateway
   vpc_id = aws_vpc.demo.id
 }
 
-# add route for main route table(internet access for public subnet)
+# allow internet access for public subnets
 resource "aws_route" "main" {
   route_table_id         = aws_vpc.demo.main_route_table_id
   destination_cidr_block = "0.0.0.0/0"
@@ -87,38 +93,62 @@ resource "aws_route" "main" {
 
 resource "aws_eip" "ngw-1" {
   vpc = true
+
+  tags {
+    Name = "ngw-1"
+  }
 }
 
 resource "aws_nat_gateway" "ngw-1" {
   allocation_id = aws_eip.ngw-1.id
   subnet_id     = aws_subnet.public-1.id
 
+  tags {
+    Name = "ngw-1"
+  }
+
   depends_on = [aws_internet_gateway.igw]
 }
 
 resource "aws_eip" "ngw-2" {
   vpc = true
+
+  tags {
+    Name = "ngw-2"
+  }
 }
 
 resource "aws_nat_gateway" "ngw-2" {
   allocation_id = aws_eip.ngw-2.id
   subnet_id     = aws_subnet.public-2.id
 
+  tags {
+    Name = "ngw-2"
+  }
+
   depends_on = [aws_internet_gateway.igw]
 }
 
 resource "aws_eip" "ngw-3" {
   vpc = true
+
+  tags {
+    Name = "ngw-3"
+  }
 }
 
 resource "aws_nat_gateway" "ngw-3" {
   allocation_id = aws_eip.ngw-3.id
   subnet_id     = aws_subnet.public-3.id
 
+  tags {
+    Name = "ngw-3"
+  }
+
   depends_on = [aws_internet_gateway.igw]
 }
 
-# add route for custom route table(internet access for private subnets)
+# allow internet access for private subnets
 resource "aws_route_table" "custom-1" {
   vpc_id = aws_vpc.demo.id
 

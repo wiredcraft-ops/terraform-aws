@@ -12,10 +12,18 @@ resource "aws_instance" "bastion" {
   }
   # TODO: disable
   associate_public_ip_address = true
+
+  tags {
+    Name = "bastion"
+  }
 }
 
 resource "aws_eip" "bastion" {
   vpc = true
+
+  tags {
+    Name = "bastion"
+  }
 }
 
 resource "aws_eip_association" "bastion" {
