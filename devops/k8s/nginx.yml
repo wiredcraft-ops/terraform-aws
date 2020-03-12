@@ -34,6 +34,7 @@ spec:
             periodSeconds: 60
 
 ---
+# NodePort
 apiVersion: v1
 kind: Service
 metadata:
@@ -49,9 +50,10 @@ spec:
       nodePort: 30080
       protocol: TCP
 
+# LoadBalancer
 # only 1 AZ is added:
-# https://github.com/kubernetes/kubernetes/issues/28586
-# https://github.com/kubernetes/kubernetes/issues/74527
+# - https://github.com/kubernetes/kubernetes/issues/28586
+# - https://github.com/kubernetes/kubernetes/issues/74527
 # apiVersion: v1
 # kind: Service
 # metadata:
