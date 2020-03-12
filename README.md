@@ -6,6 +6,7 @@
 
 - Terraform >= v0.12
 - Ansible >= 2.6
+- Setup account for terraform([https://github.com/WesleyCharlesBlake/terraform-aws-eks#iam](https://github.com/WesleyCharlesBlake/terraform-aws-eks#iam))
 
 ### Run
 
@@ -52,4 +53,5 @@ kubectl get nodes
 
 ### TODO
 
-- install metrics server - https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html
+- install metrics server: https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html
+- enable cluster autoscaler: https://docs.aws.amazon.com/eks/latest/userguide/cluster-autoscaler.html
