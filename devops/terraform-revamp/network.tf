@@ -94,7 +94,7 @@ resource "aws_route" "main" {
 resource "aws_eip" "ngw-1" {
   vpc = true
 
-  tags {
+  tags = {
     Name = "ngw-1"
   }
 }
@@ -103,7 +103,7 @@ resource "aws_nat_gateway" "ngw-1" {
   allocation_id = aws_eip.ngw-1.id
   subnet_id     = aws_subnet.public-1.id
 
-  tags {
+  tags = {
     Name = "ngw-1"
   }
 
@@ -113,7 +113,7 @@ resource "aws_nat_gateway" "ngw-1" {
 resource "aws_eip" "ngw-2" {
   vpc = true
 
-  tags {
+  tags = {
     Name = "ngw-2"
   }
 }
@@ -122,7 +122,7 @@ resource "aws_nat_gateway" "ngw-2" {
   allocation_id = aws_eip.ngw-2.id
   subnet_id     = aws_subnet.public-2.id
 
-  tags {
+  tags = {
     Name = "ngw-2"
   }
 
@@ -132,7 +132,7 @@ resource "aws_nat_gateway" "ngw-2" {
 resource "aws_eip" "ngw-3" {
   vpc = true
 
-  tags {
+  tags = {
     Name = "ngw-3"
   }
 }
@@ -141,7 +141,7 @@ resource "aws_nat_gateway" "ngw-3" {
   allocation_id = aws_eip.ngw-3.id
   subnet_id     = aws_subnet.public-3.id
 
-  tags {
+  tags = {
     Name = "ngw-3"
   }
 

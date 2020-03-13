@@ -14,7 +14,7 @@ resource "aws_instance" "database" {
 
   associate_public_ip_address = false
 
-  tags {
+  tags = {
     Name = "db"
   }
 }
