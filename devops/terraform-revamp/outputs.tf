@@ -17,3 +17,7 @@ output "config-map-aws-auth" {
 output "lb-dns-name" {
   value = aws_lb.demo.dns_name
 }
+
+output "efs-dns-name" {
+  value = aws_efs_file_system.demo.dns_name
+}
