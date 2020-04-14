@@ -6,8 +6,33 @@
 
 - Terraform >= v0.12
 - Ansible >= 2.6
-- Setup account for terraform([https://github.com/WesleyCharlesBlake/terraform-aws-eks#iam](https://github.com/WesleyCharlesBlake/terraform-aws-eks#iam))
+- AWS account with following policy:
 
+  - IAMFullAccess
+  - AutoScalingFullAccess
+  - AmazonEKSClusterPolicy
+  - AmazonEKSWorkerNodePolicy
+  - AmazonVPCFullAccess
+  - AmazonEKSServicePolicy
+  - AmazonEKS_CNI_Policy
+  - AmazonEC2FullAccess
+  - AmazonElasticFileSystemFullAccess
+  - managed policy:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
 ### Run
 
 ```
