@@ -1,5 +1,5 @@
 locals {
-  cidrs-group   = cidrsubnets(var.vpc-cidrs, 2, 2)
+  cidrs-group   = cidrsubnets(var.vpc-cidr, 2, 2)
   public-cidrs  = cidrsubnets(local.cidrs-group[0], 2, 2, 2)
   private-cidrs = cidrsubnets(local.cidrs-group[1], 2, 2, 2)
 

@@ -6,7 +6,7 @@ resource "aws_eks_cluster" "demo" {
     endpoint_private_access = true
     endpoint_public_access  = false
     security_group_ids      = [aws_security_group.demo-eks.id, aws_security_group.eks-node.id]
-    subnet_ids              = [aws_subnet.public-1.id, aws_subnet.public-2.id, aws_subnet.public-3.id, aws_subnet.private-1.id, aws_subnet.private-2.id, aws_subnet.private-3.id]
+    subnet_ids              = concat([for subnet in aws_subnet.private : subnet.id], [for subnet in aws_subnet.public : subnet.id])
   }
 
   depends_on = [

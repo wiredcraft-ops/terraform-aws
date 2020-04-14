@@ -4,7 +4,7 @@ resource "aws_instance" "bastion" {
 
   key_name = aws_key_pair.qingfeng.key_name
 
-  subnet_id = aws_subnet.public-1.id
+  subnet_id = aws_subnet.public[0].id
 
   root_block_device {
     volume_type = "gp2"
