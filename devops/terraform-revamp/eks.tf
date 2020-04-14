@@ -75,14 +75,17 @@ resource "aws_launch_configuration" "demo" {
 }
 
 resource "aws_autoscaling_group" "demo" {
+  count = var.subnet-count
+
   name_prefix = "tf-"
 
   launch_configuration = aws_launch_configuration.demo.id
 
-  desired_capacity    = 3
-  max_size            = 5
-  min_size            = 1
-  vpc_zone_identifier = [aws_subnet.private-1.id, aws_subnet.private-2.id, aws_subnet.private-3.id]
+  desired_capacity = 1
+  max_size         = 2
+  min_size         = 1
+
+  vpc_zone_identifier = [aws_subnet.private[count.index].id]
 
   target_group_arns = [aws_lb_target_group.demo.arn]
 
