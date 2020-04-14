@@ -10,40 +10,13 @@ variable "vpc-cidr" {
   default = "172.16.0.0/16"
 }
 
-variable "public-subnet-1-cidr" {
-  default = "172.16.0.0/20"
+variable "subnet-count" {
+  default = 3
 }
 
-variable "public-subnet-2-cidr" {
-  default = "172.16.16.0/20"
-}
-
-variable "public-subnet-3-cidr" {
-  default = "172.16.32.0/20"
-}
-
-variable "private-subnet-1-cidr" {
-  default = "172.16.112.0/20"
-}
-
-variable "private-subnet-2-cidr" {
-  default = "172.16.128.0/20"
-}
-
-variable "private-subnet-3-cidr" {
-  default = "172.16.144.0/20"
-}
-
-variable "az-1" {
-  default = "usw2-az1"
-}
-
-variable "az-2" {
-  default = "usw2-az2"
-}
-
-variable "az-3" {
-  default = "usw2-az3"
+variable "az-names" {
+  type    = list(string)
+  default = ["usw2-az1", "usw2-az2", "usw2-az3"]
 }
 
 variable "bastion-whitelist" {
@@ -59,6 +32,10 @@ variable "bastion-instance-type" {
 # database
 variable "database-instance-type" {
   default = "t3.micro"
+}
+
+variable "database-count" {
+  default = 1 # must less than subnet count
 }
 
 # eks

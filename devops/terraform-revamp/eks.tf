@@ -2,11 +2,14 @@ resource "aws_eks_cluster" "demo" {
   name     = var.eks-name
   role_arn = aws_iam_role.eks.arn
 
+  version = "1.15"
+
   vpc_config {
     endpoint_private_access = true
-    endpoint_public_access  = false
+    endpoint_public_access  = true
+    public_access_cidrs     = var.bastion-whitelist
     security_group_ids      = [aws_security_group.demo-eks.id, aws_security_group.eks-node.id]
-    subnet_ids              = [aws_subnet.public-1.id, aws_subnet.public-2.id, aws_subnet.public-3.id, aws_subnet.private-1.id, aws_subnet.private-2.id, aws_subnet.private-3.id]
+    subnet_ids              = concat([for subnet in aws_subnet.private : subnet.id], [for subnet in aws_subnet.public : subnet.id])
   }
 
   depends_on = [
@@ -75,14 +78,17 @@ resource "aws_launch_configuration" "demo" {
 }
 
 resource "aws_autoscaling_group" "demo" {
+  count = var.subnet-count
+
   name_prefix = "tf-"
 
   launch_configuration = aws_launch_configuration.demo.id
 
-  desired_capacity    = 3
-  max_size            = 5
-  min_size            = 1
-  vpc_zone_identifier = [aws_subnet.private-1.id, aws_subnet.private-2.id, aws_subnet.private-3.id]
+  desired_capacity = 1
+  max_size         = 2
+  min_size         = 1
+
+  vpc_zone_identifier = [aws_subnet.private[count.index].id]
 
   target_group_arns = [aws_lb_target_group.demo.arn]
 

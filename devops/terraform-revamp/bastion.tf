@@ -1,17 +1,15 @@
 resource "aws_instance" "bastion" {
   ami           = data.aws_ami.centos.id
-  instance_type = var.bastion-instance-type # TODO: fetch from data
+  instance_type = var.bastion-instance-type
 
   key_name = aws_key_pair.qingfeng.key_name
 
-  subnet_id = aws_subnet.public-1.id
+  subnet_id = aws_subnet.public[0].id
 
   root_block_device {
     volume_type = "gp2"
     volume_size = 20
   }
-  # TODO: disable
-  associate_public_ip_address = true
 
   tags = {
     Name = "bastion"

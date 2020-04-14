@@ -5,7 +5,7 @@ resource "aws_lb" "demo" {
   name               = var.name
   load_balancer_type = "application"
   internal           = false
-  subnets            = [aws_subnet.public-1.id, aws_subnet.public-2.id, aws_subnet.public-3.id]
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
   security_groups    = [aws_security_group.allow-http.id]
 }
 

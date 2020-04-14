@@ -6,8 +6,33 @@
 
 - Terraform >= v0.12
 - Ansible >= 2.6
-- Setup account for terraform([https://github.com/WesleyCharlesBlake/terraform-aws-eks#iam](https://github.com/WesleyCharlesBlake/terraform-aws-eks#iam))
+- AWS account with following policy attached:
 
+  - IAMFullAccess
+  - AutoScalingFullAccess
+  - AmazonEKSClusterPolicy
+  - AmazonEKSWorkerNodePolicy
+  - AmazonVPCFullAccess
+  - AmazonEKSServicePolicy
+  - AmazonEKS_CNI_Policy
+  - AmazonEC2FullAccess
+  - AmazonElasticFileSystemFullAccess
+  - custom policy:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
 ### Run
 
 ```
@@ -22,14 +47,13 @@ terraform apply
 
 ### Connecting to k8s
 
-> We are limiting k8s API endpoint for private access only
-
 ```
 # get EIP of bastion server
 terraform output bastion-eip
-
-# ssh in bastion
-ssh -A centos@BASTION_EIP
+# get kubeconfig
+terraform output kubeconfig > ~/.kube/eks.config
+# aws-auth configmap
+terraform output config-map-aws-auth > ../k8s/config-map-aws-auth.yml
 
 # install kubectl: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
 curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl
@@ -39,16 +63,15 @@ curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.15
 
 export AWS_ACCESS_KEY_ID=xxx
 export AWS_SECRET_ACCESS_KEY=xxx
-
-terraform output kubeconfig > ~/.kube/eks.config
-
 export KUBECONFIG=~/.kube/eks.config
 
 # only needed for self-created autoscaling group
-terraform output config-map-aws-auth > ../k8s/config-map-aws-auth.yml
 kubectl apply -f ../k8s/config-map-aws-auth.yml
 
-kubectl get nodes
+watch kubectl get nodes
+
+# test
+kubectl apply -f ../k8s/nginx.yml
 ```
 
 ### TODO

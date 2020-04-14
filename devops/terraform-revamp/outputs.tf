@@ -3,7 +3,7 @@ output "bastion-eip" {
 }
 
 output "database-private-ip" {
-  value = aws_instance.database.private_ip
+  value = aws_instance.database.*.private_ip
 }
 
 output "kubeconfig" {
