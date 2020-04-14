@@ -2,10 +2,6 @@ resource "aws_vpc" "demo" {
   cidr_block           = var.vpc-cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  tags = {
-    "kubernetes.io/cluster/${var.eks-name}" = "shared"
-  }
 }
 
 resource "aws_subnet" "public" {
