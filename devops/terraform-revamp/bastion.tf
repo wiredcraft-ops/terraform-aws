@@ -11,8 +11,6 @@ resource "aws_instance" "bastion" {
     volume_size = 20
   }
 
-  associate_public_ip_address = false
-
   tags = {
     Name = "bastion"
   }
