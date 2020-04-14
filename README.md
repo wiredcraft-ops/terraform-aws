@@ -6,7 +6,7 @@
 
 - Terraform >= v0.12
 - Ansible >= 2.6
-- AWS account with following policy:
+- AWS account with following policy attached:
 
   - IAMFullAccess
   - AutoScalingFullAccess
@@ -17,7 +17,7 @@
   - AmazonEKS_CNI_Policy
   - AmazonEC2FullAccess
   - AmazonElasticFileSystemFullAccess
-  - managed policy:
+  - custom policy:
 
 ```
 {
