@@ -2,11 +2,12 @@ resource "aws_eks_cluster" "demo" {
   name     = var.eks-name
   role_arn = aws_iam_role.eks.arn
 
-  version  = "1.15"
+  version = "1.15"
 
   vpc_config {
     endpoint_private_access = true
-    endpoint_public_access  = false
+    endpoint_public_access  = true
+    public_access_cidrs     = var.bastion-whitelist
     security_group_ids      = [aws_security_group.demo-eks.id, aws_security_group.eks-node.id]
     subnet_ids              = concat([for subnet in aws_subnet.private : subnet.id], [for subnet in aws_subnet.public : subnet.id])
   }
