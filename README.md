@@ -1,4 +1,4 @@
-## Spawn EKS in AWS with terraform
+## Spawn resources in AWS with terraform
 
 ![infra diagram](./docs/EKS.png)
 
