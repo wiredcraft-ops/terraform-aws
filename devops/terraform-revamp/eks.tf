@@ -56,6 +56,8 @@ locals {
 #!/bin/bash
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.demo.endpoint}' --b64-cluster-ca '${aws_eks_cluster.demo.certificate_authority[0].data}' '${var.eks-name}'
+# add custom dns server into /etc/resolv.conf
+echo nameserver 8.8.8.8 >> /etc/resolv.conf
 USERDATA
 }
 
